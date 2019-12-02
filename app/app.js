@@ -1,28 +1,21 @@
-var http = require('http');
+const express = require('express');
+var app = express();
+
 var mysql = require('mysql');
-const conn = mysql.createConnection({
+var connection = mysql.createConnection({
     host: 'mysql',
-    user: 'root',
-    password: 'root',
+    user: 'docker',
+    password: 'docker',
     database: 'test_database'
 });
 
-var server = http.createServer();
-
-server.on('request', function(req, res) {
-    res.writeHead(200, {'Content-Type' : 'text/plain'});
-    conn.query('SELECT * FROM `HOGE`', 
-        function (error, results, fields) {
-            if (error) {
-                console.log('query error' + error.message);
-            } else {
-                for (var i = 0; i < results.length; i++) {
-                    console.log(results[i]);
-                }
-            }
-        });
-    res.write('hello world');
-    res.end();
+app.get('/', function (req, res) {
+    connection.query('SELECT * FROM `HOGE`', function (error, results, fields) {
+        if (error) throw error;
+        res.send(results[0]);
+    });
 });
 
-server.listen(3000);
+app.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
+});
