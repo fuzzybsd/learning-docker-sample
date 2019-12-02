@@ -5,34 +5,4 @@ services:
     build: ./app
     ports:
       - 3000:3000
-    links:
-      - db:mysql
 
-  db:
-    image: mysql:5.7
-    container_name: mysql-server
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=test_database
-      - MYSQL_USER=docker
-      - MYSQL_PASSWORD=docker
-      - TZ='Asia/Tokyo'
-    volumes:
-      - ./db/data:/var/lib/mysql
-      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./db/sql:/docker-entrypoint-initdb.d
-    ports:
-      - 3306:3306
-
-  phpmyadmin:
-    container_name: phpmyadmin-server
-    image: phpmyadmin/phpmyadmin:4.8.5
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOSTS=mysql
-      - PMA_USER=root
-      - PMA_PASSWORD=root
-    ports:
-      - 8080:80
-    links:
-      - db:mysql
